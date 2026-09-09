@@ -464,7 +464,7 @@ textarea,input[type=text]{font-family:inherit;font-size:14px;color:var(--ink);ba
     <div class="fcard"><div class="fnum">02</div><h3>응답 품질까지 채점</h3>
       <p>점수뿐 아니라 응답 일관성, 자기 포장 경향, 극단·중간 응답 편향을 함께 계산합니다. 실제 검사에서 결과를 무효화하는 요인들입니다.</p></div>
     <div class="fcard"><div class="fnum">03</div><h3>지원직무와 비교</h3>
-      <p>SK하이닉스 SHE·QA·공정기술 등 15개 직무의 목표 프로필과 내 결과를 나란히 놓고 차이를 봅니다.</p></div>
+      <p>연구개발·품질·생산·IT·영업 등 13개 직군의 목표 프로필과 내 결과를 나란히 놓고 방향 차이를 봅니다.</p></div>
   </div>
 
   <h2 class="sec-title">리포트에 담기는 것</h2>
@@ -474,14 +474,14 @@ textarea,input[type=text]{font-family:inherit;font-size:14px;color:var(--ink);ba
     <div><b>02</b><p>SK 일하는 방식<small>자발성·높은 목표·틀을 깨는 시도 등 7개 항목의 부합 경향</small></p></div>
     <div><b>03</b><p>업무가치<small>과정↔성과, 안정↔변화 등 6개 축에서 무엇을 먼저 택하는지</small></p></div>
     <div><b>04</b><p>업무행동 특성<small>주도성·실행력·성취지향·도전성·책임감·규범준수·협업·정서안정·학습</small></p></div>
-    <div><b>05</b><p>지원직무 Fit<small>직무 목표 수준 대비 내 점수, 조정이 필요한 차원</small></p></div>
+    <div><b>05</b><p>직무 Fit<small>직군 목표 수준 대비 내 점수, 차이가 있는 차원</small></p></div>
     <div><b>06</b><p>결과판단<small>검사 유효성, 응답 신뢰도, 일관성, 긍정·부정 응답 편향</small></p></div>
   </div>
 
   <h2 class="sec-title">진행 방식</h2>
   <p class="sec-lead">중간 저장이 없으니 한 번에 끝낼 수 있을 때 시작하세요.</p>
   <div class="steps">
-    <div class="step"><div><b>응시 설정</b><span>분량과 지원 직무를 고르고, 제한시간·문항 순서 섞기를 켤지 정합니다.</span></div></div>
+    <div class="step"><div><b>응시 설정</b><span>분량을 고르고 제한시간·문항 순서 섞기를 정합니다. 직군은 선택 사항입니다.</span></div></div>
     <div class="step"><div><b>PART 1 · 3문항 세트</b><span>A·B·C 각각 6점 척도로 답하고, 세트마다 가장 가까운 문항과 가장 먼 문항을 하나씩 고릅니다.</span></div></div>
     <div class="step"><div><b>PART 2 · 단일문항</b><span>한 문장씩 읽고 해당하는 정도를 고릅니다. 비슷한 의미의 문항이 반복해서 나옵니다.</span></div></div>
     <div class="step"><div><b>리포트 확인</b><span>탭으로 6개 섹션을 넘겨 보고, 필요하면 PDF로 저장하세요.</span></div></div>
@@ -660,9 +660,9 @@ C: 문항 내용
       </div>
     </div>
 
-    <div class="field field-row">
-      <div><label>지원 회사</label><select id="selCompany"></select></div>
-      <div><label>지원 직무</label><select id="selJob"></select></div>
+    <div class="field">
+      <label>지원 직군 (선택 · 결과 화면에서 바꿔도 됩니다)</label>
+      <select id="selJob"></select>
     </div>
 
     <div class="field">
@@ -1013,31 +1013,21 @@ const AXES = [
   {id:"V6",a:"현재 강점 활용",b:"새 역량 확장"}
 ];
 
-/* 지원직무 목표 프로필 */
-const COMPANIES = {
-  "SK하이닉스":{
-    "SHE(안전)":{규범준수:80,"안정·위험관리":80,"과정·품질":76,책임감:78,근거판단:72},
-    "품질보증(QA)":{규범준수:82,"과정·품질":85,근거판단:76,책임감:78,"안정·위험관리":72},
-    "공정기술":{근거판단:80,"과정·품질":78,"도전·변화":70,책임감:74,실행속도:70},
-    "설비기술":{실행속도:78,책임감:78,규범준수:72,협업:70,"안정·위험관리":70},
-    "소자·설계":{근거판단:85,"도전·변화":74,"과정·품질":70,책임감:70,성취지향:72},
-    "구매·SCM":{협업:78,근거판단:72,실행속도:75,규범준수:70,책임감:72},
-    "경영지원·HR":{협업:78,규범준수:76,"과정·품질":72,근거판단:70,책임감:74}
-  },
-  "SK이노베이션":{
-    "생산·운영":{규범준수:80,"안정·위험관리":78,책임감:78,"과정·품질":74,실행속도:70},
-    "R&D":{근거판단:85,"도전·변화":78,"과정·품질":68,책임감:70,협업:66},
-    "영업·마케팅":{협업:80,실행속도:78,"도전·변화":75,성취지향:80,근거판단:66}
-  },
-  "SK텔레콤":{
-    "서비스 기획":{"도전·변화":80,협업:76,근거판단:74,실행속도:76,성취지향:74},
-    "개발·데이터":{근거판단:82,"도전·변화":74,"과정·품질":72,실행속도:74,책임감:70},
-    "영업·마케팅":{협업:80,실행속도:78,"도전·변화":75,성취지향:80,근거판단:66}
-  },
-  "SK에코플랜트":{
-    "안전·환경":{규범준수:82,"안정·위험관리":82,"과정·품질":74,책임감:78,근거판단:70},
-    "시공·현장관리":{실행속도:78,책임감:80,협업:74,규범준수:74,"안정·위험관리":72}
-  }
+/* 직군별 목표 프로필 — 특정 회사가 아니라 일반적인 직군 기준 */
+const JOBS = {
+  "연구·개발":            {근거판단:82,"도전·변화":76,"과정·품질":70,책임감:72,성취지향:70},
+  "설계·엔지니어링":       {근거판단:80,"과정·품질":78,책임감:74,"안정·위험관리":70,실행속도:68},
+  "생산·공정관리":         {"과정·품질":78,책임감:76,규범준수:74,실행속도:72,협업:70},
+  "품질보증·품질관리":     {"과정·품질":84,규범준수:80,근거판단:76,책임감:78,협업:70},
+  "안전·환경(EHS)":       {규범준수:82,"안정·위험관리":80,책임감:78,"과정·품질":74,근거판단:70},
+  "설비·유지보수":         {실행속도:78,책임감:78,"안정·위험관리":72,규범준수:70,협업:68},
+  "IT·소프트웨어 개발":    {근거판단:80,"도전·변화":74,"과정·품질":72,실행속도:74,책임감:70},
+  "데이터·분석":          {근거판단:85,"과정·품질":74,"도전·변화":68,책임감:70,협업:64},
+  "기획·전략":            {"도전·변화":78,근거판단:76,협업:74,성취지향:74,실행속도:72},
+  "영업·마케팅":          {협업:80,실행속도:78,성취지향:78,"도전·변화":74,근거판단:64},
+  "구매·SCM·물류":        {협업:76,근거판단:72,실행속도:74,규범준수:72,책임감:74},
+  "경영지원·인사·재무":    {협업:76,규범준수:76,"과정·품질":74,근거판단:70,책임감:74},
+  "고객서비스·운영":       {협업:80,책임감:74,"안정·위험관리":70,실행속도:72,규범준수:70}
 };
 
 const WORK_TYPES = [
@@ -1080,7 +1070,7 @@ const MODES={full:{p1:1,p2:1,t1:45,t2:25},half:{p1:2,p2:2,t1:23,t2:13},short:{p1
 const PER1=8, PER2=15;
 
 const state={
-  mode:"full", company:"SK하이닉스", job:"SHE(안전)", name:"",
+  mode:"full", job:"", name:"",
   bIdx:[], qIdx:[], p1:[], p2:[],
   page:0, stage:"cover", timerId:null, remain:0, useTimer:true, forceAll:true, shuffle:true
 };
@@ -1132,17 +1122,14 @@ function shuffle(arr){
    표지
    ============================================================ */
 function initCover(){
-  const c=$("#selCompany"), j=$("#selJob");
-  Object.keys(COMPANIES).forEach(k=>{
-    const o=document.createElement("option"); o.value=k; o.textContent=k; c.appendChild(o);
+  const j=$("#selJob");
+  const none=document.createElement("option");
+  none.value=""; none.textContent="직무 선택 안 함";
+  j.appendChild(none);
+  Object.keys(JOBS).forEach(k=>{
+    const o=document.createElement("option"); o.value=k; o.textContent=k; j.appendChild(o);
   });
-  const fillJobs=()=>{
-    j.innerHTML="";
-    Object.keys(COMPANIES[c.value]).forEach(k=>{
-      const o=document.createElement("option"); o.value=k; o.textContent=k; j.appendChild(o);
-    });
-  };
-  c.addEventListener("change",fillJobs); fillJobs();
+  j.value="";
 
   document.querySelectorAll("#modes .mode").forEach(b=>{
     b.addEventListener("click",()=>{
@@ -1287,7 +1274,6 @@ $("#btnStart").addEventListener("click",()=>{
   state.useTimer=$("#useTimer").checked;
   state.forceAll=$("#forceAll").checked;
   state.shuffle=$("#shuffle").checked;
-  state.company=$("#selCompany").value;
   state.job=$("#selJob").value;
   state.name=$("#inpName").value.trim()||"응시자";
   buildSample();
@@ -1425,10 +1411,11 @@ function score(){
     "도전·변화":hasValues?Math.round(S.CHAL*.6+ax("V2").bScore*.4):S.CHAL,
     "성취지향":S.ACH
   };
-  const target=COMPANIES[state.company][state.job];
-  const fitRows=Object.keys(target).map(k=>({n:k,mine:FITDIM[k],target:target[k],gap:FITDIM[k]-target[k]}));
-  const shortfall=fitRows.map(r=>Math.max(0,-r.gap));
-  const fit=Math.round(clamp(100-(shortfall.reduce((a,b)=>a+b,0)/fitRows.length)*2.8,0,100));
+  const target=state.job?JOBS[state.job]:null;
+  const fitRows=target?Object.keys(target).map(k=>({n:k,mine:FITDIM[k],target:target[k],gap:FITDIM[k]-target[k]})):[];
+  const fit=fitRows.length
+    ? Math.round(clamp(100-(fitRows.reduce((a,r)=>a+Math.max(0,-r.gap),0)/fitRows.length)*2.8,0,100))
+    : null;
 
   /* 응답 품질 */
   const pos=new Map(state.qIdx.map((orig,i)=>[orig,i]));
@@ -1614,8 +1601,8 @@ function finish(auto){
       <p class="cap">${r.type.bad}</p>
     </div>
     <div class="panel">
-      <h4>지원직무 분석 기준</h4>
-      <p class="cap">${state.company} · ${state.job} · SK 일하는 방식 7개 기준 중 ${strong}개가 70점 이상 구간입니다.</p>
+      <h4>분석 기준</h4>
+      <p class="cap">${state.job?`${state.job} 기준 · `:""}SK 일하는 방식 7개 항목 중 ${strong}개가 70점 이상 구간입니다.${state.job?"":" 직군은 05 탭에서 골라 비교할 수 있습니다."}</p>
     </div>
     <div class="meta">응시일 ${today} · 응시자 ${state.name}</div>
   </div>`;
@@ -1687,49 +1674,59 @@ function finish(auto){
     </div>
     <div class="panel">
       <h4>지원직무 해석</h4>
-      <p class="cap">${state.job} 직무 기준으로 볼 때 ${SKEYS.map(k=>({k,v:r.S[k]})).sort((a,b)=>b.v-a.v).slice(0,2).map(x=>SCALES[x.k].name).join(" · ")}이(가) 두드러지고,
+      <p class="cap">${state.job?state.job+" 기준으로 볼 때 ":""}${SKEYS.map(k=>({k,v:r.S[k]})).sort((a,b)=>b.v-a.v).slice(0,2).map(x=>SCALES[x.k].name).join(" · ")}이(가) 두드러지고,
       ${SKEYS.map(k=>({k,v:r.S[k]})).sort((a,b)=>a.v-b.v).slice(0,2).map(x=>SCALES[x.k].name).join(" · ")}은(는) 상황에 따른 발현 조건을 함께 확인할 필요가 있습니다.</p>
     </div>
     <div class="meta">응시일 ${today} · 응시자 ${state.name}</div>
   </div>`;
 
-  /* 05 지원직무 Fit */
-  const fitLbl = r.fit>=80?"부합":r.fit>=65?"비교적 부합":r.fit>=50?"부분 부합":"차이 있음";
+  /* 05 직무 Fit */
+  const fitLbl = r.fit===null?null:r.fit>=80?"부합":r.fit>=65?"비교적 부합":r.fit>=50?"부분 부합":"차이 있음";
   const up=r.fitRows.filter(x=>x.gap>=0).map(x=>x.n);
   const down=r.fitRows.filter(x=>x.gap<-5).map(x=>x.n);
   const s5=`
   <div class="rep-sec hidden" id="sec5">
-    <div class="head"><span class="num">05</span><h3>지원직무 Fit</h3></div>
-    <div class="sub">${state.company} · ${state.job} 직무 목표 프로필과 업무행동·업무가치 결과를 비교했습니다.</div>
+    <div class="head"><span class="num">05</span><h3>직무 Fit</h3></div>
+    <div class="sub">직군마다 앞에 두는 행동이 다릅니다. 직군을 고르면 그 기준과 비교해 드립니다.</div>
+    <div class="panel">
+      <div class="field" style="margin:0">
+        <label>비교할 직군</label>
+        <select id="repJob"></select>
+      </div>
+    </div>
+    ${r.fit===null?`
+      <div class="panel"><p class="cap">직군을 고르면 목표 프로필과의 차이가 여기에 표시됩니다.
+      값이 높다고 부합하는 것이 아니라, 그 직군이 앞에 두는 방향과 같은지를 봅니다.</p></div>`
+    :`
     <div class="panel">
       <div class="fit-hero">
         <div><div class="fit-lbl">${fitLbl}</div><div class="fit-num">${r.fit}</div><div class="cap">매칭 지수</div></div>
-        <p class="fit-desc">${state.job} 직무 목표범위와 ${fitLbl==="차이 있음"?"차이가 있는 편입니다":fitLbl+"하는 경향이 나타납니다"}.
-        ${down.length===r.fitRows.length?"비교한 모든 차원이 목표범위보다 낮습니다. 응답이 중간값(④)에 몰렸거나, 이 직무가 요구하는 방향과 성향이 다를 수 있습니다."
-        :down.length?`${down.join(" · ")}은(는) 목표범위보다 낮아 해당 행동이 필요한 상황의 발현조건을 확인해야 합니다.`
-        :"핵심 요구범위 대부분이 목표 수준 이상입니다."}
+        <p class="fit-desc">${state.job} 직군의 목표범위와 ${fitLbl==="차이 있음"?"차이가 있는 편입니다":fitLbl+"하는 경향이 나타납니다"}.
+        ${down.length===r.fitRows.length?"비교한 모든 차원이 목표범위보다 낮습니다. 응답이 중간값(④)에 몰렸거나, 이 직군이 요구하는 방향과 성향이 다를 수 있습니다."
+          :down.length?`${down.join(" · ")}은(는) 목표범위보다 낮아 해당 행동이 필요한 상황의 발현조건을 확인해야 합니다.`
+          :"핵심 요구범위 대부분이 목표 수준 이상입니다."}
         본 점수는 합격 가능성이 아닌 직무 요구환경 비교 지표입니다.</p>
       </div>
     </div>
     <div class="panel">
-      <h4>직무 차원별 비교</h4>
+      <h4>차원별 비교</h4>
       ${r.fitRows.map(x=>`
         <div class="fitrow">
           <div class="fn">${x.n}</div>
           <div class="fitbar"><i style="width:${x.mine}%"></i><div class="target" style="left:${x.target}%"></div></div>
           <div class="fv">${x.mine}</div>
         </div>`).join("")}
-      <p class="legend">붉은 막대: 내 점수 (0–100) · 세로선: 이 직무가 앞에 두는 수준<br>
-      값이 높다고 부합하는 것이 아니라 <b>그 직무가 앞에 두는 방향과 같은지</b>를 봅니다. 목표선을 넘긴 차원은 그 방향으로 서 있다는 뜻이고, 크게 넘겼다고 더 좋은 것은 아닙니다.</p>
+      <p class="legend">붉은 막대: 내 점수 (0–100) · 세로선: 이 직군이 앞에 두는 수준<br>
+      값이 높다고 부합하는 것이 아니라 <b>그 직군이 앞에 두는 방향과 같은지</b>를 봅니다. 크게 넘겼다고 더 좋은 것은 아닙니다.</p>
     </div>
     <div class="panel">
-      <h4>Fit을 높인 요인</h4>
-      <p class="cap">${up.length?up.join(" · ")+"이(가) 직무 목표범위와 가깝게 나타납니다.":"목표범위에 도달한 차원이 확인되지 않았습니다."}</p>
+      <h4>가까운 요인</h4>
+      <p class="cap">${up.length?up.join(" · ")+"이(가) 목표범위와 가깝게 나타납니다.":"목표범위에 도달한 차원이 확인되지 않았습니다."}</p>
     </div>
     <div class="panel">
-      <h4>조정이 필요한 요인</h4>
-      <p class="cap">${down.length?down.join(" · ")+"은(는) 목표범위와의 차이를 실제 경험으로 확인해 보세요.":"큰 차이를 보이는 차원이 없습니다. 강점 점수는 실제 행동사례와 함께 확인하세요."}</p>
-    </div>
+      <h4>차이가 있는 요인</h4>
+      <p class="cap">${down.length?down.join(" · ")+"은(는) 목표범위와의 차이를 실제 경험으로 확인해 보세요.":"큰 차이를 보이는 차원이 없습니다."}</p>
+    </div>`}
     <div class="meta">응시일 ${today} · 응시자 ${state.name}</div>
   </div>`;
 
@@ -1816,6 +1813,21 @@ function finish(auto){
       window.scrollTo(0,0);
     });
   });
+  /* 직군을 바꾸면 Fit 섹션을 다시 계산 */
+  const rj=$("#repJob");
+  if(rj){
+    const none=document.createElement("option");
+    none.value=""; none.textContent="직무 선택 안 함"; rj.appendChild(none);
+    Object.keys(JOBS).forEach(k=>rj.appendChild(
+      Object.assign(document.createElement("option"),{value:k,textContent:k})));
+    rj.value=state.job;
+    rj.addEventListener("change",()=>{
+      state.job=rj.value;
+      const onFit=!$("#sec5").classList.contains("hidden");
+      finish(true);
+      if(onFit) document.querySelectorAll("#repNav button")[4].click();
+    });
+  }
   $("#btnRetry").addEventListener("click",()=>location.reload());
   window.scrollTo(0,0);
 }
